@@ -222,7 +222,7 @@ public class Scn01 extends BaseApp {
        Thread.sleep(5000);
     }
         @Test
-    public void test05() throws InterruptedException {
+    public void test05() throws InterruptedException, MalformedURLException {
 
             //Uygulama yüklenir ana sayfa valid edilir
             MobileElement homepage= driver.findElementById("android:id/action_bar");
@@ -253,12 +253,16 @@ public class Scn01 extends BaseApp {
             touchAction.longPress(LongPressOptions.longPressOptions().withElement(ElementOption.element(longPress1))).
                     waitAction(WaitOptions.waitOptions(Duration.ofSeconds(2))).release().perform();
             //Menu A and  Menu B tıklanıp seçildiği valid edilir.
+            /*
+            Burda Menu A ve Menu B tıkladıktan sonra çıkan Toast messages,UIAutomation2 toast mesajları bulamıyor.
+            */
             MobileElement menuA=driver.findElementByXPath("//android.widget.TextView[@text='Menu A']");
             menuA.click();
-            Thread.sleep(5000);
-            WebDriverWait waitForToast = new WebDriverWait(driver,25);
+            Thread.sleep(8000);
+
+            WebDriverWait waitForToast = new WebDriverWait(driver,3);
             waitForToast.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/hierarchy/android.widget.Toast")));
-            String toastMessageA=driver.findElement(By.xpath("/hierarchy/android.widget.Toast")).getText();
+            String toastMessageA=driver.findElementByClassName("android.widget.Toast").getText();
             Assert.assertTrue(toastMessageA.contains("Item 1a was chosen"));
             Thread.sleep(5000);
 
@@ -267,16 +271,50 @@ public class Scn01 extends BaseApp {
             MobileElement menuB=driver.findElementByXPath("//android.widget.TextView[@text='Menu B']");
             menuB.click();
             Thread.sleep(5000);
-            waitForToast.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/hierarchy/android.widget.Toast")));
             String toastMessageB=driver.findElement(By.xpath("/hierarchy/android.widget.Toast")).getText();
             Assert.assertTrue(toastMessageB.contains("Item 1a was chosen"));
             Thread.sleep(5000);
-
-
-
-
-
-
-
         }
+
+        @Test
+    public void test06() throws InterruptedException {
+            //Uygulama yüklenir ana sayfa valid edilir
+            MobileElement homepage= driver.findElementById("android:id/action_bar");
+            Assert.assertTrue(homepage.isDisplayed());
+            Thread.sleep(5000);
+
+            //App menusune tıklanır
+            MobileElement appMenu=driver.findElementByXPath("//android.widget.TextView[@text='App']");
+            appMenu.click();
+            Thread.sleep(5000);
+            //Fragment tıklarız
+            MobileElement fragmentMenu=driver.findElementByXPath("//android.widget.TextView[@text='Fragment']");
+            fragmentMenu.click();
+            Thread.sleep(5000);
+            //Hide and Show 1.link tıklanır
+            MobileElement hideShowMenu=driver.findElementByXPath("(//android.widget.TextView[@text='Hide and Show'])[1]");
+            hideShowMenu.click();
+            Thread.sleep(5000);
+            //Hide and Show sayfasında olduğu valid edilir
+            MobileElement hideshowTitle=driver.findElementByXPath("//android.widget.TextView[@text='App/Fragment/Hide and Show']");
+            String hideshowText=hideshowTitle.getText();
+            Assert.assertTrue(hideshowText.contains("Hide and Show"));
+            Thread.sleep(5000);
+            //two Hide buton and two textbox valid
+            List<MobileElement>mobileListButon=driver.findElementsByXPath("//android.widget.Button");
+            Assert.assertEquals(2,mobileListButon.size());
+            Thread.sleep(5000);
+
+            List<MobileElement>mobileListTextBox=driver.findElementsByXPath("//android.widget.EditText");
+            Assert.assertEquals(2,mobileListTextBox.size());
+            Thread.sleep(5000);
+            //Textboxlar clear yapılıp yazı yazılır ve bu textin hide olduğunu ,hide butonun show olduğu kontrol edilir
+            MobileElement textBox1=driver.findElementByXPath("(//android.widget.EditText[@text='Initial text.'])[1]");
+            textBox1.clear();
+            Thread.sleep(3000);
+            textBox1.sendKeys("appium01");
+
+            //Show butonuna basılarak textin geri geldiği kontrol edilir.
+        }
+
 }
