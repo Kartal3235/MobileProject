@@ -308,13 +308,27 @@ public class Scn01 extends BaseApp {
             List<MobileElement>mobileListTextBox=driver.findElementsByXPath("//android.widget.EditText");
             Assert.assertEquals(2,mobileListTextBox.size());
             Thread.sleep(5000);
-            //Textboxlar clear yapılıp yazı yazılır ve bu textin hide olduğunu ,hide butonun show olduğu kontrol edilir
+            //Textboxlar  hide olduğunu ,hide butonun show olduğu kontrol edilir
             MobileElement textBox1=driver.findElementByXPath("(//android.widget.EditText[@text='Initial text.'])[1]");
-            textBox1.clear();
-            Thread.sleep(3000);
-            textBox1.sendKeys("appium01");
+            MobileElement hideBtn1=driver.findElementById("com.hmh.api:id/frag1hide");
+            hideBtn1.click();
+            Thread.sleep(10000);
+            MobileElement textBox2=driver.findElementByXPath("(//android.widget.EditText[@text='Initial text.'])[2]");
+            Thread.sleep(5000);
+            MobileElement hideBtn2=driver.findElementById("com.hmh.api:id/frag2hide");
+            hideBtn2.click();
+            Thread.sleep(5000);
+
+            List<MobileElement>mblistText=driver.findElementsByXPath("//android.widget.LinearLayout");
+            Assert.assertTrue(mblistText.contains(""));
+            Thread.sleep(5000);
+            Assert.assertTrue(mblistText.contains("appium2"));
+            Thread.sleep(5000);
 
             //Show butonuna basılarak textin geri geldiği kontrol edilir.
+            MobileElement showBtn1=driver.findElementById("com.hmh.api:id/frag1hide");
+            showBtn1.click();
+            Thread.sleep(5000);
         }
 
 }
