@@ -1,10 +1,13 @@
 package MobileTask;
 
+import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.MultiTouchAction;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.touch.LongPressOptions;
+import io.appium.java_client.touch.TapOptions;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.ElementOption;
 import io.appium.java_client.touch.offset.PointOption;
@@ -375,7 +378,7 @@ public class Scn01 extends BaseApp {
 
         }
         @Test
-     public void test08() throws InterruptedException {
+     public void test08() throws InterruptedException, MalformedURLException {
 
             //Uygulama yüklenir ana sayfa valid edilir
             MobileElement homepage= driver.findElementById("android:id/action_bar");
@@ -393,17 +396,19 @@ public class Scn01 extends BaseApp {
             //Scrollable tıklanır(Bu sefer index-> 2)
             MobileElement scrol=driver.findElementByXPath("(//android.widget.TextView[@text='5. Scrollable'])[2]");
             scrol.click();
+            Thread.sleep(7000);
+
+            //****Tab 30 yatay kaydırma(Horizontal scroll)****
+            TouchAction touchAction=new TouchAction(driver);
+
+            driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0))" +
+                    ".setAsHorizontalList().scrollIntoView(new UiSelector().text(\"TAB 30\"))"));
+            MobileElement tab30=driver.findElementByXPath("//android.widget.TextView[@text='TAB 30']");
+            tab30.click();
             Thread.sleep(5000);
-            AndroidElement element = (AndroidElement) driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\"Tab 5\"))");
-            element.click();
-            Thread.sleep(5000);
-
-            //MobileElement tab5=driver.findElementByXPath("//android.widget.TextView[@text='TAB 5']");
-            //MobileElement tab10=driver.findElementByXPath("//android.widget.TextView[@text='TAB 10']");
-            //MobileElement tab15=driver.findElementByXPath("//android.widget.TextView[@text='TAB 15']");
-
-
-
+            MobileElement doc30=driver.findElementByXPath("//android.widget.TextView[@text='Content for tab with tag Tab 30']");
+            String text30=doc30.getText();
+            Assert.assertTrue(text30.contains("Tab 30"));
 
         }
 }
