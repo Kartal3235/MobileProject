@@ -23,6 +23,7 @@ public class BaseApp {
         capabilities.setCapability(MobileCapabilityType.APP,"C:\\Users\\YUEX\\IdeaProjects\\MobileProject\\src\\App\\APIDemos.apk");
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,6000);
         capabilities.setCapability("noReset","true");
+        capabilities.setCapability(MobileCapabilityType.SUPPORTS_JAVASCRIPT,true);
 
         AndroidDriver<MobileElement>driver=new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"),capabilities);
 

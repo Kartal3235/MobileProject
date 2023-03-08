@@ -3,6 +3,7 @@ package MobileTask;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.touch.LongPressOptions;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.ElementOption;
@@ -17,6 +18,7 @@ import org.testng.annotations.Test;
 import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 
 public class Scn01 extends BaseApp {
@@ -277,7 +279,7 @@ public class Scn01 extends BaseApp {
         }
 
         @Test
-    public void test06() throws InterruptedException {
+        public void test06() throws InterruptedException {
             //Uygulama yüklenir ana sayfa valid edilir
             MobileElement homepage= driver.findElementById("android:id/action_bar");
             Assert.assertTrue(homepage.isDisplayed());
@@ -330,5 +332,78 @@ public class Scn01 extends BaseApp {
             showBtn1.click();
             Thread.sleep(5000);
         }
+        @Test
+        public void test07() throws InterruptedException {
 
+            //Uygulama yüklenir ana sayfa valid edilir
+            MobileElement homepage= driver.findElementById("android:id/action_bar");
+            Assert.assertTrue(homepage.isDisplayed());
+            Thread.sleep(5000);
+
+            //App menusune tıklanır
+            MobileElement appMenu=driver.findElementByXPath("//android.widget.TextView[@text='App']");
+            appMenu.click();
+            Thread.sleep(5000);
+            //Notification tıklanır
+            MobileElement notif=driver.findElementByXPath("//android.widget.TextView[@text='Notification']");
+            notif.click();
+            Thread.sleep(5000);
+            //IncomingMessage tıklanır,valid edilir
+            MobileElement ıncomıng=driver.findElementByXPath("(//android.widget.TextView[@text='IncomingMessage'])[1]");
+            ıncomıng.click();
+            Thread.sleep(5000);
+            MobileElement ıncomıngTitle=driver.findElementByXPath("//android.widget.TextView[@text='App/Notification/IncomingMessage']");
+           Assert.assertTrue(ıncomıngTitle.isDisplayed());
+            Thread.sleep(5000);
+            //Show notification tıklanır,notification bar area checked
+            MobileElement showNotif=driver.findElementById("com.hmh.api:id/notify");
+            showNotif.click();
+            Thread.sleep(5000);
+            driver.openNotifications();
+            Thread.sleep(5000);
+            //driver.executeScript("mobile : getNotifications");
+            //Map<String,Object>notifications= (Map<String, Object>) driver.executeScript("mobile : getNotifications");
+            //
+            Map<String,Object>response= (Map<String, Object>) driver.executeScript("mobile : getNotifications");
+            List<Map<String,Object>>notifications= (List<Map<String, Object>>) response.get("statusBarNotifications");
+            for (Map<String, Object> notification : notifications) {
+                Map<String, String> innerNotification = (Map<String, String>)notification.get("notification");
+                if (innerNotification.get("title") != null) {
+                    System.out.println(innerNotification.get("title"));
+                }
+            }
+
+        }
+        @Test
+     public void test08() throws InterruptedException {
+
+            //Uygulama yüklenir ana sayfa valid edilir
+            MobileElement homepage= driver.findElementById("android:id/action_bar");
+            Assert.assertTrue(homepage.isDisplayed());
+            Thread.sleep(5000);
+            //Views menusune tıklanır
+            MobileElement viewsMenu=driver.findElementByXPath("//android.widget.TextView[@text='Views']");
+            viewsMenu.click();
+            Thread.sleep(5000);
+            //Tabs menu tıklanır
+            AndroidElement element1 = (AndroidElement) driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\"Tabs\"))");
+            element1.click();
+            Thread.sleep(10000);
+
+            //Scrollable tıklanır(Bu sefer index-> 2)
+            MobileElement scrol=driver.findElementByXPath("(//android.widget.TextView[@text='5. Scrollable'])[2]");
+            scrol.click();
+            Thread.sleep(5000);
+            AndroidElement element = (AndroidElement) driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().text(\"Tab 5\"))");
+            element.click();
+            Thread.sleep(5000);
+
+            //MobileElement tab5=driver.findElementByXPath("//android.widget.TextView[@text='TAB 5']");
+            //MobileElement tab10=driver.findElementByXPath("//android.widget.TextView[@text='TAB 10']");
+            //MobileElement tab15=driver.findElementByXPath("//android.widget.TextView[@text='TAB 15']");
+
+
+
+
+        }
 }
